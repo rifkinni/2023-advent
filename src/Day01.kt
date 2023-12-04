@@ -11,16 +11,21 @@ fun main() {
             "nine" to "9"
     )
 
-    fun convertToDigits(str: String): String {
-        val regex = Regex("one|two|three|four|five|six|seven|eight|nine|[1-9]" )
-        val matchResult = regex.findAll(str).map { res ->
-            if (matchers.containsKey(res.value)) {
-                matchers[res.value]
-            } else {
-                res.value
-            }
-        }
-        return matchResult.first() + matchResult.last()
+    fun findMatch(str: String, pattern: String): String {
+        val regex = Regex(pattern )
+        return regex.find(str)!!.value
+    }
+
+    fun findFirst(str: String): String {
+        val pattern = "one|two|three|four|five|six|seven|eight|nine|[1-9]"
+        val result = findMatch(str, pattern)
+        return matchers[result] ?: result
+    }
+
+    fun findLast(str: String): String {
+        val pattern = "eno|owt|eerht|ruof|evif|xis|neves|thgie|enin|[1-9]"
+        val result = findMatch(str.reversed(), pattern)
+        return matchers[result.reversed()] ?: result
     }
 
     fun part1(input: List<String>): Int {
@@ -36,7 +41,7 @@ fun main() {
     fun part2(input: List<String>): Int {
         var sum = 0
         input.forEach { str ->
-            val foo = convertToDigits(str)
+            val foo = findFirst(str) + findLast(str)
             sum += Integer.parseInt(foo)
         }
         return sum
